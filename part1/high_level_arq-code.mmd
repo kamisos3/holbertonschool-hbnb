@@ -1,0 +1,36 @@
+---
+id: 8286cea8-35db-4d59-a390-c0589fc37b70
+---
+classDiagram
+
+    class PresentationLayer {
+      - Interface
+      - Place
+      - Reviews
+      - Ammenities
+      - Booking
+      - Price
+      +ServiceAPIs()
+    }
+
+    class BusinessLogicLayer {
+      - User/Owner
+      - Place
+      - Reviews
+      - Pricing Calculator
+      +CoreModels()
+    }
+
+
+   
+    class DataAccessLayer {
+      - Database
+      - Place
+      - Date/Time
+      - Users/Owners
+      +FetchData()
+      +SaveData()
+    }
+
+PresentationLayer --> BusinessLogicLayer: This is the facade that gives access to the users input requests.
+BusinessLogicLayer --> DataAccessLayer: The database can fetch the information required for auditing from the items listed below.

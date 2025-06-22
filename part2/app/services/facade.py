@@ -10,10 +10,13 @@ class HBnBFacade:
         self.amenity_repo = InMemoryRepository()
 
     def create_place(self, place_data):
+        title = place_data.get("title")
         price = place_data.get("price")
         latitude = place_data.get("latitude")
         longitude = place_data.get("longitude")
 
+        if not title:
+            raise ValueError("Title is required")
         if price < 0 or not (-90 <= latitude <= 90) or not (-180 <= longitude <= 180):
             raise ValueError("Invalid price, latitude or longitude")
 

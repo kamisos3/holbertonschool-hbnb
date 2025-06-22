@@ -10,16 +10,18 @@ amenity_model = ns.model('PlaceAmenity', {
     'name': fields.String(description='Name of the amenity')
 })
 
-amenity_model = ns.model('PlaceAmenity', {
-    'id': fields.String(description='Amenity ID'),
-    'name': fields.String(description='Name of the amenity')
-})
-
 user_model = ns.model('PlaceUser', {
     'id': fields.String(description='User ID'),
     'first_name': fields.String(description='First name of the owner'),
     'last_name': fields.String(description='Last name of the owner'),
     'email': fields.String(description='Email of the owner')
+})
+
+review_model = ns.model('PlaceReview', {
+    'id': fields.String(description='Review ID'),
+    'text': fields.String(description='Text of the review'),
+    'rating': fields.Integer(description='Rating (1-5'),
+    'user_id': fields.String(description='User ID')
 })
 
 place_model = ns.model('Place', {
@@ -29,9 +31,9 @@ place_model = ns.model('Place', {
     'latitude': fields.Float(required=True, description='Latitude of the place'),
     'longitude': fields.Float(required=True, description='Longitude of the place'),
     'owner_id': fields.String(required=True, description='ID of the owner'),
-    'amenities': fields.List(fields.String, required=True, description="List of amenities ID's")
+    'amenities': fields.List(fields.String, required=True, description="List of amenities ID's"),
+    'reviews': fields.List(fields.Nested(review_model))
 })
-
 
 class PlaceList(Resource):
     @ns.expect(place_model)

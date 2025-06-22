@@ -7,7 +7,7 @@ amenity_model = api.model('Amenity', {
     'name': fields.String(
         required=True,
         description='__init__: Name of amenity',
-        max_lenght=50
+        max_length=50
     )
 })
 
@@ -54,24 +54,24 @@ class AmenityResource(Resource):
             'name': amenity.name
         }, 200
 
-    @api.expect(amenity_model, validate=False)
-    @api.response(200, '__init__: Amenity updated successfully', amenity_response)
-    @api.response(400, '__init__: Validation error')
-    @api.response(404, '__init__: Amenity not found')
-    def put (self, amenity_id):
-        amenity = facade.get_amenity(amenity_id)
-        if not amenity:
-            return {'error': '__init__: Amenity not found'}, 404
+@api.expect(amenity_model, validate=False)
+@api.response(200, '__init__: Amenity updated successfully', amenity_response)
+@api.response(400, '__init__: Validation error')
+@api.response(404, '__init__: Amenity not found')
+def put (self, amenity_id):
+    amenity = facade.get_amenity(amenity_id)
+    if not amenity:
+        return {'error': '__init__: Amenity not found'}, 404
 
-        update_data = api.payload
+    update_data = api.payload
 
-        try:
-            updated_amenity = facade.update_amenity(amenity_id, update_data)
-            if isinstance(updated_amenity, str):
-                    return {'error': f'__init__: {updated_amenity}'}, 400
-             return {
-                'id': update_amenity.id,
-                'name': update_amenity.name
-            }, 200
-        except Exception as e:
-            return {'error': f'__init__: {str(e)}'}, 400
+    try:
+        updated_amenity = facade.update_amenity(amenity_id, update_data)
+        if isinstance(updated_amenity, str):
+            return {'error': f'__init__: {updated_amenity}'}, 400
+        return {
+            'id': updated_amenity.id,
+            'name': updated_amenity.name
+        }, 200
+    except Exception as e:
+        return {'error': f'__init__: {str(e)}'}, 400

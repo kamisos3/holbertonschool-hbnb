@@ -26,10 +26,43 @@ class HBnBFacade:
         return place
 
     def get_place(self, place_id):
-        return self.place_repo.get(place_id)
+        place = self.place.place_repo.get(place_id)
+        if not place:
+            return None
+
+        owner = self.user_repo.get(place.owner_id)
+        amenities = [self.amenity_repo.get(amenity_id) for amenity_id in place.amenities]
+        reviews = self.review_repo.get_reviews_by_place(place.id)
+
+        return {
+            "id": place.id,
+            "title": place.title,
+            "description": place.description,
+            "price": place.price,
+            "latitude": place.latitude,
+            "owner": {
+                "id": owner.id,
+                "first_name": owner.first_name,
+                "last_name": owner.last_name,
+                "email": owner.email
+            } if owner else None,
+            "amenities": [
+                {"id": amenity.id, "name": amenity.name}
+                for amenity in amenities if amenity
+            ],
+            "reviews": [
+                {
+                    "id": review.id,
+                    "text": review.text,
+                    "rating": review.rating,
+                    "user_id": review.user_id
+                } for review in reviews
+            ]
+        }
 
     def get_all_places(self):
-        return self.place_repo.get_all()
+        all_places = self.place_repo.get_all()
+        return [self.get_place(place.id) for place in all_places]
 
     def update_place(self, place_id, place_data):
         place = self.place_repo.get(place_id)
@@ -96,3 +129,47 @@ class HBnBFacade:
 
         self.user_repo.update(user_id, update_data)
         return user
+
+    def create_review(self, review_data):
+        text = review_data.get('text')
+        rating = review_data.get('rating')
+        user_id = review_data.get('user_id')
+        place_id = review_data.get('place_id')
+
+        if rating < 1 or rating > 5:
+            raise ValueError("Invalid rating")
+
+        if not self.user_repo.get(user_id):
+            raise ValueError("User not found")
+
+        if not self.place_repo.get(place_id):
+            raise ValueError("Place not found")
+
+        review = Review(**review_data)
+        self.review_repo.add(review)
+        return review
+
+    def get_review(self, review_id):
+        return self.review_repo.get(review_id)
+
+    def get_all_reviews(self):
+        return self.review_repo.get(review_id)
+
+    def get_reviews_by_place(self, place_id):
+        reviews = self.review_repo.get(review_id)
+        return [r for r in reviews if r.place_id == place_id]
+
+    def update_review(self, review_id, review_data):
+        review = self.review_repo.get(review_id)
+        if not review:
+            return None
+        review_update(review_data)
+        self.review_repo.update(review_id, review_data)
+        return review
+
+    def delete_review(self, review_id):
+        review = self.review_repo.get(review_id)
+        if not review:
+            return None
+        self.review_repo.delete(review_id)
+        return True

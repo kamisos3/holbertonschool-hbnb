@@ -8,15 +8,12 @@ from datetime import datetime
 class User:
         EMAIL_REGEX = re.compile(r'^[\w\.-]+\.\w+$')
 
-    def __init__(self, first_name: str, last_name: str, email: str, is_admin: bool = False):
-        self.id = str(uuid.uuid4())
-        self.first_name = first_name
-        self.last_name = last_name
-        self.email = email
-        self.is_admin = is_admin
-        self.created_at = datetime.now()
-        self.updated_at = self.created_at
-        self._validate()
+def __init__(self, **kwargs):
+    self.id = str(uuid.uuid4())
+    self.first_name = kwargs.get('first_name', '')
+    self.last_name = kwargs.get('last_name', '')
+    self.email = kwargs.get('email', '')
+    self.is_admin = kwargs.get('is_admin', False)
 
 def _validate(self):
     if not self.first_name or len(self.first_name) > 50:
@@ -33,8 +30,4 @@ def save(self):
 
 def update(self, data: dict):
     for key, value in data.items():
-        if key, value in data.items():
-            if hasattr(self, key):
-                setattr(self, key, value)
-            self.save()
-            self._validate()
+        setattr(self, key, value)

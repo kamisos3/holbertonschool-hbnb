@@ -51,3 +51,46 @@ def update(self, data: dict):
             setattr(self, key, value)
     self.save()
     self._validate()
+
+    @property
+    def price(self):
+        return self._price
+
+    @price.setter
+    def price(self, value):
+        if value < 0:
+            raise ValueError("Price must be non-negative")
+        self._price = value
+
+    @property
+    def latitude(self, value):
+        return self.latitude
+
+    @latitude.setter
+    def latitude(self, value):
+        if not (-90 <= value <= 90):
+            raise ValueError("latitude must be between -90 and 90")
+        self._latitude = value
+
+    @property
+    def longitude(self):
+        return self._longitude
+
+    @longitude.setter
+    def longitude(self, value):
+        if not (-180 <= value <= 180):
+            raise ValueError("Longitude must be between -180 and 180")
+        self._longitude = value
+
+    def to_dict(self, full=False):
+        data = {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'price': self.price,
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+            'owner_id': self.owner_id,
+            'amenities': self.amenities
+        }
+        return data

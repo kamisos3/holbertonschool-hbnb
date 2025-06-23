@@ -73,7 +73,7 @@ Throughout this project you'll see API and endppoint implementation using Flask 
 
 Clone this in your terminal:
 
-	git clone https://github.com/kamisos3/holbertonschool-hbnb/tree/main/part2https://github.com/kamisos3/holbertonschool-hbnb/tree/main/part2https://github.com/kamisos3/holbertonschool-hbnb/tree/main/part2https://github.com/kamisos3/holbertonschool-hbnb/tree/main/part2
+	git clone https://github.com/kamisos3/holbertonschool-hbnb/tree/main/part2
 
 Then install from requirements.txt pytest, flask and flask-restx:
 

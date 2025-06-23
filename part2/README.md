@@ -18,7 +18,7 @@ Throughout this project you'll see API and endppoint implementation using Flask 
 
 ▶  **Concepts**
 
-- Structurizing the files following this structure:
+- Setting up the structure with the directory and files following this:
 
 
 		hbnb/

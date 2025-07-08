@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """Allows to write review"""
-
 import uuid
 from datetime import datetime
 
@@ -25,9 +24,8 @@ class Review:
     def save(self):
         self.updated_at = datetime.now()
 
-    def update(self, data: dict):
+    def update(self, data):
         for key, value in data.items():
             if hasattr(self, key):
                 setattr(self, key, value)
         self.save()
-        self._validate()

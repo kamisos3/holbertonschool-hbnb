@@ -4,6 +4,7 @@ from app.api.v1 import register_namespaces
 
 def create_app():
     app = Flask(__name__)
+    app.config.from_object(config_class)
 
     blueprint = Blueprint('api', __name__)
     api = Api(

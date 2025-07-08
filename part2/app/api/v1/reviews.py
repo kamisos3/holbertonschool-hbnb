@@ -52,11 +52,16 @@ def put(self, review_id):
 
 @ns.response(200, 'Deleted')
 @ns.response(404, 'Not found')
-def delete(self, review_id):
-    deleted = facade.delete_review(review_id)
-    if not deleted:
-        return {"error": "Review not found"}, 404
-    return {"message": "Review deleted successfully"}
+def delete(review_id):
+    review = facade.get_review(review_id)
+    if not review:
+        abort(404)
+
+    success = facade.delete_review(review_id)
+    if not success:
+        abort(500)
+
+    return jsonify({}), 200
 
 @ns.route('/places/<place_id>/reviews')
 class PlaceReviews(Resource):

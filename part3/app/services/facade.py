@@ -170,12 +170,10 @@ class HBnBFacade:
         self.review_repo.update(review_id, review_data)
         return review
 
-    def delete_review(review_id):
+    def delete_review(self, review_id):
         review = self.review_repo.get(review_id)
         if not review:
-            return None
-        self.review_repo.delete(review_id)
-        return True
+            return {"error": "Review not found"}, 404
 
 if __name__ == '__main__':
     app.run(debug=True)

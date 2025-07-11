@@ -3,11 +3,17 @@
 import os
 
 class Config:
-    SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')
+    SECRET_KEY = 'hbnb-project-pt3'
     DEBUG = False
+    TESTING = False
 
 class DevelopmentConfig(Config):
     DEBUG = True
+    ENV = 'development'
+
+class ProductionConfig(Config):
+    ENV = 'production'
+    DEBUG = False
 
 config = {
     'development': DevelopmentConfig,

@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 ns = Namespace('Review', description='Review related operations')
 
@@ -18,11 +19,28 @@ simple_review_model = ns.model('SimpleReview', {
 
 @ns.route('/')
 class ReviewList(Resource):
+    @jwt_required()
     @ns.expect(review_model)
     @ns.response(201, 'Review created')
     @ns.response(400, 'Invalid input')
     def post(self):
+        current_user = get_jwt_identity()
         data = ns.payload
+
+        # Injects user_id
+        data['user_id'] = current_user['id']
+
+        place = facade.get_place(data['place_id'])
+        if not place:
+            return {"error": "Place not found"}, 404
+
+        if place.owner_id == current_user['id']:
+            return {"error": "You cannot review your own place"}, 400
+
+        existing = facade.get_user_review_for_place(current_user['id'], data['place_id'])
+        if existing:
+            return {"error": "You havr already reviewed this place"}, 400
+
         try:
             review = facade.create_review(data)
             return vars(review), 201
@@ -39,29 +57,36 @@ class ReviewResource(Resource):
             return {"error": "Review not found"}, 404
         return vars(review), 200
 
+@jwt_required()
 @ns.expect(review_model)
 @ns.response(200, 'Updated')
 @ns.response(404, 'Not found')
 @ns.response(400, 'Invalid data')
 def put(self, review_id):
+    current_user = get_jwt_identity()
+    review = facade.get_review_identity()
+    if not review:
+        return {"error": "Unauthorized action"}, 403
+
     data = ns.payload
     updated = facade.updated_review(review_id, data)
     if not updated:
         return {"error": "Review not found"}, 404
-    return {"message": "Review updated successfully"}
+    return {"message": "Review updated successfully"}, 200
 
-@ns.response(200, 'Deleted')
-@ns.response(404, 'Not found')
-def delete(review_id):
+@jwt_required()
+@ns.response(204, 'Review deleted')
+def delete(self, review_id):
     review = facade.get_review(review_id)
     if not review:
-        abort(404)
+        return {"error": "Review not found"}, 404
 
-    success = facade.delete_review(review_id)
-    if not success:
-        abort(500)
+    current_user = get_jwt_identity()
+    if review.user_id != current_user['id']:
+        return {"error": "Unauthorized action"}, 403
 
-    return jsonify({}), 200
+    facade.delete_review(review_id)
+    return {}, 204
 
 @ns.route('/places/<place_id>/reviews')
 class PlaceReviews(Resource):

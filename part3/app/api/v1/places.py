@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import HBnBFacade
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 ns = Namespace('places', description='Place operations')
 
@@ -36,13 +37,24 @@ place_model = ns.model('Place', {
 })
 
 class PlaceList(Resource):
+    @jwt_required()
     @ns.expect(place_model)
     @ns.response(201, 'Place successfully created')
     @ns.response(400, 'Invalid input data')
     def post(self):
+        current_user = get_jwt_identity()
         data = ns.payload
         try:
-            new_place = facade.create_place(data)
+            new_place = {
+                'id': str(uuid4()),
+                'title': data['title'],
+                'description': data.get('description'),
+                'price': data.get('price', 0),
+                'owner_id': current_user['id']
+            }
+
+            # Stores the new place to dict
+            facade.create_place(data)
             return new_place.to_dict(), 201
         except ValueError as e:
             return {'error': str(e)}, 400
@@ -62,15 +74,19 @@ class PlaceResource(Resource):
             return {'error': 'Place not found'}, 404
         return place.to_dict(full=True), 200
 
+    @jwt_required()
     @ns.expect(place_model)
     @ns.response(200, 'Place updated successfully')
     @ns.response(404, 'Place not found')
     @ns.response(400, 'Invalid input data')
     def put(self, place_id):
+        current_user = get_jwt_identity()
         data = ns.payload
         updated_place = facade.update_place(place_id, data)
         if updated_place == 'not found':
             return {'error': 'Place not found'}, 404
+        if place['owner_id'] != current_user['id']:
+            return {'error': 'Unauthorized action'}, 403
         elif updated_place == 'invalid_data':
             return {'error': 'Invalid input data'}, 400
         return {'message': 'Place updated successfully'}, 200

@@ -1,9 +1,8 @@
-#!/usr/bin/python3
 """Creates user"""
-
 import re
 import uuid
 from datetime import datetime
+from flask_bcrypt import Bcrypt
 
 class User:
     def __init__(self, **kwargs):

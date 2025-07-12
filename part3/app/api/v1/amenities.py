@@ -11,7 +11,7 @@ amenity_model = ns.model('Amenity', {
     )
 })
 
-amenity_response = ns.model('AmenityResponse', {
+amenity_response = ns.model(z'AmenityResponse', {
     'id': fields.String(description='__init__: Unique amenity ID'),
     'name': fields.String(description='__init__: Amenity name')
 })

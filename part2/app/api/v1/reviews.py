@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from flask import abort, jsonify
 
 ns = Namespace('Review', description='Review related operations')
 
@@ -34,42 +35,31 @@ class ReviewResource(Resource):
     @ns.response(200, 'Success')
     @ns.response(404, 'Not found')
     def get(self, review_id):
-        review = facade.get_reiew(review_id)
+        review = facade.get_review(review_id)
         if not review:
             return {"error": "Review not found"}, 404
         return vars(review), 200
 
-@ns.expect(review_model)
-@ns.response(200, 'Updated')
-@ns.response(404, 'Not found')
-@ns.response(400, 'Invalid data')
-def put(self, review_id):
-    data = ns.payload
-    updated = facade.updated_review(review_id, data)
-    if not updated:
-        return {"error": "Review not found"}, 404
-    return {"message": "Review updated successfully"}
+    @ns.expect(review_model)
+    @ns.response(200, 'Updated')
+    @ns.response(404, 'Not found')
+    @ns.response(400, 'Invalid data')
+    def put(self, review_id):
+        data = ns.payload
+        updated = facade.updated_review(review_id, data)
+        if not updated:
+            return {"error": "Review not found"}, 404
+        return {"message": "Review updated successfully"}
 
-@ns.response(200, 'Deleted')
-@ns.response(404, 'Not found')
-def delete(review_id):
-    review = facade.get_review(review_id)
-    if not review:
-        abort(404)
+    @ns.response(200, 'Deleted')
+    @ns.response(404, 'Not found')
+    @ns.response(500, 'Server error')
+    def delete(self, review_id):
+        review = facade.get_review(review_id)
+        if not review:
+            abort(404, 'Review not found')
 
-    success = facade.delete_review(review_id)
-    if not success:
-        abort(500)
-
-    return jsonify({}), 200
-
-@ns.route('/places/<place_id>/reviews')
-class PlaceReviews(Resource):
-    @ns.response(200, 'Success')
-    @ns.response(404, 'Place not found')
-    def get(self, place_id):
-        place = facade.get_place(place_id)
-        if not place:
-            return {"error": "Place not found"}, 404
-        reviews = facade.get_reviews_by_place(place_id)
-        return [vars(r) for r in reviews], 200
+        success = facade.delete_review(review_id)
+        if not success:
+            abort(500, 'Could not delete review')
+        return {}, 200

@@ -21,6 +21,8 @@ def create_app(config_class="config.DevelopmentConfig"):   # Defines config clas
         )
 
     register_namespaces(api)
+    bcrypt.init_app(app)
+    jwt.init_app(app)
     app.register_blueprint(api_v1)
 
     return app

@@ -1,3 +1,4 @@
+from werkzeug.security import check_password_hash 
 from flask_restx import Namespace, Resource, fields
 from app.services import HBnBFacade
 from app.models.user import User
@@ -58,9 +59,6 @@ class UserList(Resource):
 
         if facade.get_user_by_email(user_data['email']):
             return {'error': 'Email already registered'}, 400
-
-        hashed_pw = generate_password_hash(user_data['password'])
-        user_data['password'] = hashed_pw
 
         try:
             new_user = facade.create_user(user_data)

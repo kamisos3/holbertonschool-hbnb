@@ -14,7 +14,7 @@ class Amenity:
 
     def _validate(self):
         if not self.name or len(self.name) > 50:
-            raise ValueError("Name musst be 1-50 characters")
+            raise ValueError("Name must be 1-50 characters")
 
     def save(self):
         self.updated_at = datetime.now()
@@ -22,6 +22,6 @@ class Amenity:
     def update(self, data: dict):
         for key, value in data.items():
             if hasattr(self, key):
-                setattr(self, key):
+                setattr(self, key, value)
         self.save()
         self._validate()

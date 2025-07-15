@@ -2,9 +2,11 @@
 import re
 import uuid
 from datetime import datetime
-from flask_bcrypt import Bcrypt
+from app import bcrypt
 
 class User:
+    EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+    
     def __init__(self, **kwargs):
         self.id = str(uuid.uuid4())
         self.first_name = kwargs.get('first_name', '')
@@ -30,7 +32,9 @@ class User:
 
     def update(self, data: dict):
         for key, value in data.items():
-            setattr(self, key, value)
+            if hasattr(self, key):
+                setattr(self, key, value)
+        self.save()
 
     def hash_password(self, password):
         """Hashes password to store after"""

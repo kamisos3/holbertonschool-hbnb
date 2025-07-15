@@ -18,6 +18,8 @@ class Login(Resource):
         credentials = ns.payload
         user = facade.get_user_by_email(credentials['email'])
 
+        print('Stored hash:', user.password if user else None,
+              'Attempt:', credentials['password'])
         if not user or not user.verify_password(credentials['password']):
             return {'error': 'Invalid credentials'}, 401
 

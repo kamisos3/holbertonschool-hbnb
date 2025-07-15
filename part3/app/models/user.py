@@ -2,7 +2,7 @@
 import re
 import uuid
 from datetime import datetime
-from app import bcrypt
+from app.extensions import bcrypt
 
 class User:
     EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')

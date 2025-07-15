@@ -27,7 +27,6 @@ class ReviewList(Resource):
         current_user = get_jwt_identity()
         data = ns.payload
 
-        # Injects user_id
         data['user_id'] = current_user['id']
 
         place = facade.get_place(data['place_id'])
@@ -52,41 +51,40 @@ class ReviewResource(Resource):
     @ns.response(200, 'Success')
     @ns.response(404, 'Not found')
     def get(self, review_id):
-        review = facade.get_reiew(review_id)
+        review = facade.get_review(review_id)
         if not review:
             return {"error": "Review not found"}, 404
         return vars(review), 200
 
-@jwt_required()
-@ns.expect(review_model)
-@ns.response(200, 'Updated')
-@ns.response(404, 'Not found')
-@ns.response(400, 'Invalid data')
-def put(self, review_id):
-    current_user = get_jwt_identity()
-    review = facade.get_review_identity()
-    if not review:
-        return {"error": "Unauthorized action"}, 403
+    @jwt_required()
+    @ns.expect(review_model)
+    @ns.response(200, 'Updated')
+    @ns.response(404, 'Not found')
+    @ns.response(400, 'Invalid data')
+    def put(self, review_id):
+        current_user = get_jwt_identity()
+        review = facade.get_review(review_id)
+        if not review:
+            return {"error": "Review not found"}, 404
+        if review.user_id != current_user['id']:
+            return {"error": "Unauthorized action"}, 403
+        data = ns.payload
+        updated = facade.update_review(review_id, data)
+        if not updated:
+            return {"error": "Review not found"}, 404
+        return {"message": "Review updated successfully"}, 200
 
-    data = ns.payload
-    updated = facade.updated_review(review_id, data)
-    if not updated:
-        return {"error": "Review not found"}, 404
-    return {"message": "Review updated successfully"}, 200
-
-@jwt_required()
-@ns.response(204, 'Review deleted')
-def delete(self, review_id):
-    review = facade.get_review(review_id)
-    if not review:
-        return {"error": "Review not found"}, 404
-
-    current_user = get_jwt_identity()
-    if review.user_id != current_user['id']:
-        return {"error": "Unauthorized action"}, 403
-
-    facade.delete_review(review_id)
-    return {}, 204
+    @jwt_required()
+    @ns.response(204, 'Review deleted')
+    def delete(self, review_id):
+        review = facade.get_review(review_id)
+        if not review:
+            return {"error": "Review not found"}, 404
+        current_user = get_jwt_identity()
+        if review.user_id != current_user['id']:
+            return {"error": "Unauthorized action"}, 403
+        facade.delete_review(review_id)
+        return {}, 204
 
 @ns.route('/places/<place_id>/reviews')
 class PlaceReviews(Resource):

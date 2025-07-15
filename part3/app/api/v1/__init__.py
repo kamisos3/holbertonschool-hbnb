@@ -11,8 +11,9 @@ api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/v1')
 api = Api(api_v1, version='1.0', title="HBnB API")
 
 def register_namespaces(api):
-    api.add_namespace(auth.ns, path='/api/v1/auth')
-    api.add_namespace(users.ns, path='/api/v1/users')
-    api.add_namespace(places.ns, path='/api/v1/places')
-    api.add_namespace(reviews.ns, path='/api/v1/reviews')
-    api.add_namespace(amenities.ns, path='/api/v1/amenities')
+    # Base blueprint prefix is '/api/v1', so use relative paths here
+    api.add_namespace(auth.ns, path='/auth')
+    api.add_namespace(users.ns, path='/users')
+    api.add_namespace(places.ns, path='/places')
+    api.add_namespace(reviews.ns, path='/reviews')
+    api.add_namespace(amenities.ns, path='/amenities')

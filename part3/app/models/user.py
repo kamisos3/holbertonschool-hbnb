@@ -12,7 +12,10 @@ class User:
         self.first_name = kwargs.get('first_name', '')
         self.last_name = kwargs.get('last_name', '')
         self.email = kwargs.get('email', '')
-        self.password = kwargs.get('password', '')
+        raw_pw = kwargs.get('password', '')
+        self.password = ''
+        if raw_pw:
+            self.hash_password(raw_pw)
         self.is_admin = kwargs.get('is_admin', False)
 
     def _validate(self):
@@ -37,9 +40,12 @@ class User:
         self.save()
 
     def hash_password(self, password):
-        """Hashes password to store after"""
         self.password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-    def verify_password(self, password):
-        """Compares that password inputed matched hashed password"""
-        return bcrypt.check_password_hash(self.password, password)
+    def verify_password(self, raw_password: str) -> bool:
+        if not self.password or not raw_password:
+            return False
+        try:
+            return bcrypt.check_password_hash(self.password, raw_password)
+        except ValueError:
+            return False

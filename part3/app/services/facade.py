@@ -105,9 +105,7 @@ class HBnBFacade:
     def create_user(self, user_data):
         plaintext_pw = user_data.get('password')
         data = {k: v for k, v in user_data.items() if k != 'password'}
-        user = User(**data)
-        if plaintext_pw:
-            user.hash_password(plaintext_pw)
+        user = User(**user_data)
         self.user_repo.add(user)
         return user
 

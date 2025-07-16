@@ -36,7 +36,10 @@ class User:
     def update(self, data: dict):
         for key, value in data.items():
             if hasattr(self, key):
-                setattr(self, key, value)
+                if key == 'password' and value:
+                    self.hash_password(value)
+                else:
+                    setattr(self, key, value)
         self.save()
 
     def hash_password(self, password):

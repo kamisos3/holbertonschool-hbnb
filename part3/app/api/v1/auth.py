@@ -1,9 +1,21 @@
 from flask_restx import Namespace, Resource, fields
 from flask import request
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_jwt
 from app.services import facade
 
 ns = Namespace('auth', description='Authentication operations')
+
+def check_admin_privileges():
+    try:
+        claims = get_jwt()
+        return claims.get('is_admin', False)
+    except:
+        return False
+
+def require_admin():
+    if not check_admin_privileges():
+        return {'error': 'Admin privileges required'}, 403
+    return None
 
 login_model = ns.model('Login',{
     'email': fields.String(required=True, description='User email'),
@@ -21,7 +33,7 @@ class Login(Resource):
               'Attempt:', credentials.get('password'))
         if not user:
             return {'error': 'Invalid credentials'}, 401
-        if not user.password:
+        if not user or not user.verify_password(credentials['password']):
             access_token = create_access_token(
                 identity=str(user.id),
                 additional_claims={'is_admin': user.is_admin}

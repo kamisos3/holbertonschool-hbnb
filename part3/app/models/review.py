@@ -29,3 +29,14 @@ class Review:
             if hasattr(self, key):
                 setattr(self, key, value)
         self.save()
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'text': self.text,
+            'rating': self.rating,
+            'place_id': self.place.id,
+            'user_id': self.user.id,
+            'created_at': self.created_at.isoformat(),
+            'updated_at': self.updated_at.isoformat()
+        }

@@ -1,10 +1,9 @@
 from flask_restx import Namespace, Resource, fields
-from app.services import HBnBFacade
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from app.services import facade
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
 ns = Namespace('places', description='Place operations')
 
-facade = HBnBFacade()
 
 amenity_model = ns.model('PlaceAmenity', {
     'id': fields.String(description='Amenity ID'),
@@ -26,16 +25,15 @@ review_model = ns.model('PlaceReview', {
 })
 
 place_model = ns.model('Place', {
-    'title': fields.String(required=True, description='Ttile of the place'),
+    'title': fields.String(required=True, description='Title of the place'),
     'description': fields.String(description='Description of the place'),
     'price': fields.Float(required=True, description='Price per night'),
     'latitude': fields.Float(required=True, description='Latitude of the place'),
     'longitude': fields.Float(required=True, description='Longitude of the place'),
-    'owner_id': fields.String(required=True, description='ID of the owner'),
-    'amenities': fields.List(fields.String, required=True, description="List of amenities ID's"),
-    'reviews': fields.List(fields.Nested(review_model))
+    'amenities': fields.List(fields.String, description="List of amenity IDs"),
 })
 
+@ns.route('/')
 class PlaceList(Resource):
     @jwt_required()
     @ns.expect(place_model)
@@ -44,18 +42,16 @@ class PlaceList(Resource):
     def post(self):
         current_user = get_jwt_identity()
         data = ns.payload
+        
+        required_fields = ['title', 'price', 'latitude', 'longitude']
+        for field in required_fields:
+            if field not in data:
+                return {'error': f"'{field}' is a required property"}, 400
+        
+        data['owner_id'] = current_user
         try:
-            new_place = {
-                'id': str(uuid4()),
-                'title': data['title'],
-                'description': data.get('description'),
-                'price': data.get('price', 0),
-                'owner_id': current_user['id']
-            }
-
-            # Stores the new place to dict
-            facade.create_place(data)
-            return new_place.to_dict(), 201
+            place = facade.create_place(data)
+            return place.to_dict(), 201
         except ValueError as e:
             return {'error': str(e)}, 400
 
@@ -64,15 +60,20 @@ class PlaceList(Resource):
         places = facade.get_all_places()
         return [place.to_dict() for place in places], 200
 
+    @jwt_required()
+    @ns.response(403, 'Unauthorized action')
+    def put(self):
+        return {'error': 'Unauthorized action'}, 403
+
 @ns.route('/<string:place_id>')
 class PlaceResource(Resource):
     @ns.response(200, 'Place details retrieved successfully')
     @ns.response(404, 'Place not found')
     def get(self, place_id):
-        place = facade.get_place(place_id)
+        place = facade.get_place_details(place_id)
         if not place:
             return {'error': 'Place not found'}, 404
-        return place.to_dict(full=True), 200
+        return place, 200
 
     @jwt_required()
     @ns.expect(place_model)
@@ -81,12 +82,18 @@ class PlaceResource(Resource):
     @ns.response(400, 'Invalid input data')
     def put(self, place_id):
         current_user = get_jwt_identity()
+        claims = get_jwt()
+        is_admin = claims.get('is_admin', False)
+        
         data = ns.payload
-        updated_place = facade.update_place(place_id, data)
-        if updated_place == 'not found':
+        existing = facade.get_place(place_id)
+        if not existing:
             return {'error': 'Place not found'}, 404
-        if place['owner_id'] != current_user['id']:
+            
+        if not is_admin and existing.owner.id != current_user:
             return {'error': 'Unauthorized action'}, 403
-        elif updated_place == 'invalid_data':
+            
+        updated = facade.update_place(place_id, data)
+        if updated == 'invalid_data':
             return {'error': 'Invalid input data'}, 400
-        return {'message': 'Place updated successfully'}, 200
+        return updated.to_dict(), 200

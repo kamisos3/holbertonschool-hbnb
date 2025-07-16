@@ -14,8 +14,19 @@ def create_app(config_class="config.DevelopmentConfig"):
     bcrypt.init_app(app)
     jwt.init_app(app)
 
-    app.register_blueprint(api_v1)
+    @jwt.unauthorized_loader
+    def unauthorized_callback(callback):
+        return {'error': 'Unauthorized action'}, 401
 
+    @jwt.invalid_token_loader
+    def invalid_token_callback(callback):
+        return {'error': 'Unauthorized action'}, 401
+
+    @jwt.expired_token_loader
+    def expired_token_callback(jwt_header, jwt_payload):
+        return {'error': 'Unauthorized action'}, 401
+
+    app.register_blueprint(api_v1)
 
     from flask import redirect
     @app.route('/')

@@ -89,8 +89,11 @@ class Place:
             'description': self.description,
             'price': self.price,
             'latitude': self.latitude,
-            'longitude': self.longitude,
-            'owner_id': self.owner_id,
-            'amenities': self.amenities
+            'longitude': self.longitude
         }
-        return data
+        
+        if full:
+            data['owner_id'] = self.owner.id
+            data['amenities'] = [amenity.id for amenity in self.amenities]
+        
+        return data 

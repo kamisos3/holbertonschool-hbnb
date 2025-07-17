@@ -85,3 +85,17 @@ class SQLAlchemyRepository(Repository):
 
     def get_by_attribute(self, attr_name, attr_value):
         return self.model.query.filter(getattr(self.model, attr_name) == attr_value).first()
+    
+    
+class UserRepository(SQLAlchemyRepository):
+    def __init__(self):
+        super().__init__(User)
+
+    def get_user_by_email(self, email):
+        return self.model.query.filter_by(email=email).first()
+    
+    def is_email_registered(self, email):
+        return self.model.query.filter_by(email=email).count() > 0
+    
+    def get_admin_users(self):
+        return self.model.query.filter_by(is_admin=True).all()

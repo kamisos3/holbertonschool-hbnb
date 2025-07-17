@@ -3,7 +3,7 @@ from app.models.user import User
 from app.models.place import Place
 from app.models.review import Review
 from app.models.amenity import Amenity
-from app.persistance.repository import SQLAlchemyRepository
+from app.persistence.repository import SQLAlchemyRepository
 
 class HBnBFacade:
     def __init__(self):
@@ -156,6 +156,9 @@ class HBnBFacade:
 
         self.user_repo.update(user_id, update_data)
         return user
+    
+    def delete_user(self, user_id):
+        self.user_repo.delete(user_id)
 
     def create_review(self, review_data):
         text = review_data.get('text')

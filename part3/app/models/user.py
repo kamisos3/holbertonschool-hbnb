@@ -1,10 +1,19 @@
 """Creates user"""
 import re
 import uuid
+from .base_model import BaseModel
 from datetime import datetime
 from app.extensions import bcrypt
 
-class User:
+class User(BaseModel):
+    __tablename__ = 'users'
+
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(100), nullable=False, unique=True)
+    password = db.Column(db.String(128), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
+
     EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
     
     def __init__(self, **kwargs):

@@ -1,9 +1,12 @@
 from flask_restx import Namespace, Resource, fields
 from flask import request
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_jwt
+from app.persistence.user_repository import UserRepository
 from app.services import facade
 
 ns = Namespace('auth', description='Authentication operations')
+
+user_repo = UserRepository()
 
 def check_admin_privileges():
     try:

@@ -1,12 +1,16 @@
 from flask import Flask, Blueprint
+from flask_sqlalchemy import SQLAlchemy
 from config import DevelopmentConfig
 from app.extensions import bcrypt, jwt
 
+db = SQLAlchemy()
 
 def create_app(config_class="config.DevelopmentConfig"):
     app = Flask(__name__)
     app.config.from_object(config_class)
     app.config['JWT_SECRET_KEY'] = 'hbnb-project-pt3'
+
+    db.init_app(app)   # Initializes the database
 
     from app.api.v1 import api_v1
 

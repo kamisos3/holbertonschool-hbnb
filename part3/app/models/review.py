@@ -12,7 +12,7 @@ class Review(BaseModel):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     place_id = db.Column(db.Integer, db.ForeignKey('places.id'), nullable=False)
 
-    user = db.relationship('User', backref='reviews', lazy=True)
+    user = db.relationship('User', back_populates='reviews', lazy=True)
 
     def __init__(self, text: str, rating: int):
         self.text = text

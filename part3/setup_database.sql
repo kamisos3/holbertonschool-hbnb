@@ -1,3 +1,7 @@
+-- Create database and select it
+CREATE DATABASE IF NOT EXISTS hbnb_dev;
+USE hbnb_dev;
+
 -- Drop tables if they exist
 DROP TABLE IF EXISTS Place_Amenity;
 DROP TABLE IF EXISTS Review;

@@ -10,7 +10,7 @@ def create_app(config_class="config.DevelopmentConfig"):
     app.config.from_object(config_class)
     app.config['JWT_SECRET_KEY'] = 'hbnb-project-pt3'
 
-    db.init_app(app)   # Initializes the database
+    db.init_app(app)
 
     from app.api.v1 import api_v1
 

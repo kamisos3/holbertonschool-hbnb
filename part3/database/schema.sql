@@ -1,7 +1,7 @@
--- HBnB Database Schema Creation Script
+
 -- This script creates all tables and relationships for the HBnB project
 
--- Drop tables if they exist (for clean recreation)
+-- Drop tables if they exist
 DROP TABLE IF EXISTS Place_Amenity;
 DROP TABLE IF EXISTS Review;
 DROP TABLE IF EXISTS Place;
@@ -56,7 +56,7 @@ CREATE TABLE Review (
     UNIQUE KEY unique_user_place_review (user_id, place_id)
 );
 
--- Create Place_Amenity Junction Table (Many-to-Many relationship)
+-- Create Place_Amenity Junction Table
 CREATE TABLE Place_Amenity (
     place_id CHAR(36) NOT NULL,
     amenity_id CHAR(36) NOT NULL,

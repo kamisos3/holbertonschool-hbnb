@@ -4,8 +4,31 @@
 import uuid
 from datetime import datetime
 from typing import List
+from app.models.baseclass import BaseModel
+from app.models.user import User
+from app.models.review import Review
+from app.models.amenity import Amenity
+from app import db
 
-class Place:
+place_amenity = db.Table('place_amenity',
+    db.Column('place_id', db.Integer, db.ForeignKey('places.id'), primary_key=True),
+    db.Column('amenity_id', db.Integer, db.ForeignKey('amenities.id'), primary_key=True)
+)
+
+class Place(BaseModel):
+    __tablename__ = 'places'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.String(255), nullable=True)
+    price = db.Column(db.Float, nullable=False)
+    latitude = db.Column(db.Float, nullable=False)
+    longitude = db.Column(db.Float, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+    reviews = db.relationship('Review', backref='place', lazy=True)
+    amenities = db.relationship('Amenity', secondary=place_amenity, lazy='subquery', backref=db.backref('places', lazy=True))
+
     def __init__(self, title: str, description: str, price: float, latitude: float,
                  longitude: float, owner: 'User'):
         self.id = str(uuid.uuid4())
@@ -96,4 +119,4 @@ class Place:
             data['owner_id'] = self.owner.id
             data['amenities'] = [amenity.id for amenity in self.amenities]
         
-        return data 
+        return data

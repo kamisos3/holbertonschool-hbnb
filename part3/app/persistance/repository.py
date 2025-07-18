@@ -70,7 +70,7 @@ class SQLAlchemyRepository(Repository):
     def get_all(self):
         return self.model.query.all()
     
-    def upadate(self, obj_id, data):
+    def update(self, obj_id, data):
         obj = self.get(obj_id)
         if obj:
             for key, value in data.items():

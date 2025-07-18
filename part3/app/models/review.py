@@ -1,18 +1,22 @@
 #!/usr/bin/python3
 """Allows to write review"""
-import uuid
-from datetime import datetime
+from app.models.baseclass import BaseModel
+from app import db
 
-class Review:
-    def __init__(self, text: str, rating: int, place: 'Place', user: 'User'):
-        self.id = str(uuid.uuid4())
+class Review(BaseModel):
+    __tablename__ = 'reviews'
+
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(255), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    place_id = db.Column(db.Integer, db.ForeignKey('places.id'), nullable=False)
+
+    user = db.relationship('User', backref='reviews', lazy=True)
+
+    def __init__(self, text: str, rating: int):
         self.text = text
         self.rating = rating
-        self.place = place
-        self.user = user
-        self.created_at = datetime.now()
-        self.updated_at = self.created_at
-        self._validate()
 
     def _validate(self):
         if not self.text:
@@ -21,22 +25,9 @@ class Review:
         if not 1 <= self.rating <= 5:
             raise ValueError("Rating must be between 1 and 5")
 
-    def save(self):
-        self.updated_at = datetime.now()
-
-    def update(self, data):
-        for key, value in data.items():
-            if hasattr(self, key):
-                setattr(self, key, value)
-        self.save()
-
     def to_dict(self):
         return {
             'id': self.id,
             'text': self.text,
-            'rating': self.rating,
-            'place_id': self.place.id,
-            'user_id': self.user.id,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat()
+            'rating': self.rating
         }

@@ -156,9 +156,6 @@ class HBnBFacade:
 
         self.user_repo.update(user_id, update_data)
         return user
-    
-    def delete_user(self, user_id):
-        self.user_repo.delete(user_id)
 
     def create_review(self, review_data):
         text = review_data.get('text')

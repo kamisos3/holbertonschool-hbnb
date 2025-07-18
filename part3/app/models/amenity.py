@@ -1,12 +1,18 @@
 #!/usr/bin/python3
 """To add amenities"""
-
-import uuid
+from app.models.baseclass import BaseModel
+from app import db
 from datetime import datetime
 
-class Amenity:
+class Amenity(BaseModel):
+    __tablename__ = 'amenities'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+
+    places = db.relationship('Place', secondary='place_amenity', back_populates='amenities')
+
     def __init__(self, name: str):
-        self.id = str(uuid.uuid4())
         self.name = name
         self.created_at = datetime.now()
         self.updated_at = self.created_at

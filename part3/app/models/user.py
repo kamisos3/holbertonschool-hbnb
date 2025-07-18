@@ -1,18 +1,22 @@
 """Creates user"""
 import re
 import uuid
-from .base_model import BaseModel
+from app.models.baseclass import BaseModel
 from datetime import datetime
 from app.extensions import bcrypt
+from app import db
 
 class User(BaseModel):
     __tablename__ = 'users'
 
+    id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
     password = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
+
+    places = db.relationship('Place', backref='owner', lazy=True)
 
     EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
     
@@ -28,7 +32,6 @@ class User(BaseModel):
         self.is_admin = kwargs.get('is_admin', False)
 
     def _validate(self):
-        """Validates user information intake to be within requirements"""
         if not self.first_name or len(self.first_name) > 50:
             raise ValueError("First name must be 1-50 characters")
 
@@ -39,7 +42,6 @@ class User(BaseModel):
             raise ValueError("Invalid email format")
 
     def save(self):
-        """Gets time were user made an update"""
         self.updated_at = datetime.now()
 
     def update(self, data: dict):

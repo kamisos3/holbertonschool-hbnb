@@ -1,4 +1,4 @@
-HBnB - Part 2: Implementing BL and API
+HBnB - Part 3: Authentication and Database
 
 ▶  **Introduction**
 

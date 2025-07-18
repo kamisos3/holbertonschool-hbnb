@@ -1,6 +1,4 @@
-
 -- This script creates all tables and relationships for the HBnB project
-
 -- Drop tables if they exist
 DROP TABLE IF EXISTS Place_Amenity;
 DROP TABLE IF EXISTS Review;

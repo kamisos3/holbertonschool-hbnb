@@ -1,8 +1,8 @@
-HBnB - Part 3: Authentication and Database
+**HBnB - Part 3: Authentication and Database**
 
 ▶  **Introduction**
 
-This is the second part of the HBnB project, here we will tackle creating the functionality of the application. This structure is based on the Business Logic Layers. The focus on this part is to have RESTful APi and endpoints that ensure an effective web connection. It will also give a greater scope on how application look before having a front-end. 
+In this part of the HBnB project it's to add protection to our app. Using JSON Web Token authentication and hashing passwords that are created. Also implement memory using MySQL engine that handles SQL to create the database and the tables to store data. This is key to have a protected application that can store and retrieve requests.
 
 ▶  **Table of Contents**
 
@@ -14,16 +14,22 @@ This is the second part of the HBnB project, here we will tackle creating the fu
 
 ▶  **Overview**
 
-Throughout this project you'll see API and endppoint implementation using Flask documentation and Python that follow the Facade design pattern. A test layer was added to ensure function between Flask and the apps endpoints besides using curl.
+In this project we added Bcrypt, to hash passwords, Flask-JWT-Extended for authentication, SQLAlchemy/MySQL to create the databases and SQLite for development.
 
 ▶  **Concepts**
 
-- Setting up the structure with the directory and files following this:
+- There was files added to the structure to prevent circulation, make the user repository and add a database, like this:
 
 
 		hbnb/
 		├── app/
 		│   ├── __init__.py
+		|	├── extensions.py
+		├── database/
+		|   ├── setup_database.sql
+		|   ├── table_relation.sql
+		|   ├── db_diagram.mmd
+		|   ├── db_diagram.png
 		│   ├── api/
 		│   │   ├── __init__.py
 		│   │   ├── v1/
@@ -32,48 +38,61 @@ Throughout this project you'll see API and endppoint implementation using Flask 
 		│   │       ├── places.py
 		│   │       ├── reviews.py
 		│   │       ├── amenities.py
+		|	|		├── auth.py
 		│   ├── models/
 		│   │   ├── __init__.py
 		│   │   ├── user.py
 		│   │   ├── place.py
 		│   │   ├── review.py
 		│   │   ├── amenity.py
+		|	|	├── baseclass.py
 		│   ├── services/
 		│   │   ├── __init__.py
 		│   │   ├── facade.py
 		│   ├── persistence/
 		│       ├── __init__.py
 		│       ├── repository.py
+		|		├── user_repository.py
 		├── run.py
 		├── config.py
 		├── requirements.txt
 		├── README.md
 
-- The function __init__ is added to initialize the functions within each directory.
-- Flask was used as the framework that is flexible so is the application can be scaled.
-- UUID's are added so data can be pulled and distributed.
-- This was made by first adding the core business logic classes followed by the user, amenity, place and review endpoints to handle CRUD operations, create, read, update and delete. The delete operation will be added later in the project.
-- Follows the facade structural design pattern that can be implemented using classes.
+- Adding JWT authentication to secure the API and manage user sessions.
+- Implement adiministrator login and credential verification.
+- Make the CRUD methods interact with the database and are validated.
+- SQLAlchemy was used as the Object Relational Mapper to prepare for MySQL queries.
+- Maped relationships between User, Place, Amenity and Review in a Mermaid diagram in /database/db_diagram.mmd
 
 
 ▶   **Example**
 
 	class HBnBFacade:
 	    def __init__(self):
-	       self.user_repo = InMemoryRepository()
+	       self.user_repo = SQLAlchemyRepository(User)
+		   self.place_repo = SQLAlchemyRepository(Place)
 
                      ...
 
 	    def create_user(self, user_data)
+		user = User(**user_data)
 		self.user_repo.add(user)
 		return user
+
+- To create the databases type in your terminal:
+
+		$ flask shell
+
+		 >> from app import db
+
+		 >> db.create_all()
 
 
 ▶   **Installation**
 
 Clone this in your terminal:
 
-	git clone https://github.com/kamisos3/holbertonschool-hbnb/tree/main/part2
+	git clone https://github.com/kamisos3/holbertonschool-hbnb/tree/main/part3
 
 Then install from requirements.txt pytest, flask and flask-restx:
 

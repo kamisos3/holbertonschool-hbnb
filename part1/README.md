@@ -1,4 +1,4 @@
-**HBnB - Part 1: Technical Documentation**
+# HBnB - Part 1: Technical Documentations
 
 This project is the first phase of the HBnB Evolution application, which aims to simulate a simplified AirBnB-like platform. The focus in is to create comprehensive **technical documentation** that lays the groundwork for implementation. It includes architectural design, detailed class and sequence diagrams, and entity definitions.
 

@@ -115,7 +115,33 @@ function handleLoginSubmit(e) {
         return;
     }
     
-    simulateLogin(email);
+    loginUser(email, password);
+}
+
+async function loginUser(email, password) {
+    try {
+        const response = await fetch('https://your-api-url/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
+        if (response.ok) {
+            const data = await response.json();
+            document.cookie = `token=${data.access_token}; path=/`;
+            window.location.href = 'index.html';
+        } else {
+            let errorMsg = 'Login failed';
+            try {
+                const err = await response.json();
+                if (err && err.message) errorMsg = err.message;
+            } catch {}
+            alert(errorMsg);
+        }
+    } catch (error) {
+        alert('Network error: ' + error.message);
+    }
 }
 
 

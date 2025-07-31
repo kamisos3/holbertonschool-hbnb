@@ -7,7 +7,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
+    background-color: #dbf7fe;
     color: #333;
     line-height: 1.6;
     min-height: 100vh;
@@ -16,7 +16,7 @@ body {
 }
 
 header {
-    background-color: #A4DDED !important;
+    background-color: #f8fce6 !important;
     color: white; 
     padding: 1rem 0;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -39,7 +39,7 @@ header {
 
 /* Login button class - required */
 .login-button {
-    background-color: #3498db; 
+    background-color: #89aeb7; 
     color: white;
     padding: 10px 20px;
     text-decoration: none;
@@ -50,12 +50,12 @@ header {
 }
 
 .login-button:hover {
-    background-color: #2980b9;
+    background-color: #89aeb7;
 }
 
 /* Navigation bar - must include relevant links */
 nav {
-    background-color: #A4DDED;
+    background-color: #89aeb7;
     padding: 0.5rem 0;
 }
 
@@ -93,7 +93,7 @@ main {
 
 /* Page headings */
 h1, h2 {
-    color: #A4DDED;
+    color: #3f4446;
     margin-bottom: 1.5rem;
 }
 
@@ -138,15 +138,14 @@ h1 {
 }
 
 .place-price {
-    font-size: 1.3rem;
-    font-weight: bold; 
-    color: #27ae60;
+    font-size: 1rem;
+    font-weight: regular;
     margin-bottom: 1rem;
 }
 
 /* Details button - required class */
 .details-button {
-    background-color: #3498db;
+    background-color: #89aeb7;
     color: white; 
     padding: 8px 16px;
     text-decoration: none;
@@ -157,8 +156,15 @@ h1 {
     transition: background-color 0.3s;
 }
 
+.amenity-icon {
+    width: 5px;
+    height: 5px;
+    vertical-align: middle;
+    margin-right: 2px;
+}
+
 .details-button:hover {
-    background-color: #2980b9;
+    background-color: #89aeb7;
 }
 
 /* Places container for grid layout */
@@ -195,19 +201,26 @@ h1 {
     object-fit: cover;
     border-radius: 8px;
     margin-bottom: 1rem;
+    display: block;
+    margin: 0 auto;
 }
 
 .place-meta {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem; 
-    margin: 1rem 0;
+    gap: 1.5rem; 
+    margin: 1.5rem 0;
 }
 
 .place-meta div {
     background-color: #f8f9fa;
     border-radius: 5px;
     border: 1px solid #e9ecef;
+    padding: .5rem;
+}
+
+.place-price {
+    margin: 1rem 0;
 }
 
 .amenities {
@@ -321,7 +334,7 @@ h1 {
 .form button,
 .add-review button {
     width: 100%; 
-    background-color: #27ae60; 
+    background-color: #204c5c; 
     color: white;
     padding: 12px; 
     border: none; 
@@ -333,12 +346,12 @@ h1 {
 
 .form button:hover,
 .add-review button:hover {
-    background-color: #229954;
+    background-color: #204c5c;
 }
 
 /* Footer - must include all rights reserved text */
 footer {
-    background-color: #2c3e50; 
+    background-color: #204c5c; 
     color: white; 
     text-align: center; 
     padding: 1.5rem 0; 

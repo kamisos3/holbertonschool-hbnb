@@ -3,26 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>List of Places</title>
+    <title>HBnB - Places to Stay</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="icon.png" type="image/png">
 </head>
 <body>
     <header>
-        <nav>
-            <a href="login.html" id="login-link">Login</a>
-        </nav>
+        <div class="header-container">
+            <img src="logo.png" alt="HBnB Logo" class="logo">
+            <a href="login.html" class="login-button">Login</a>
+        </div>
     </header>
+
+    <nav>
+        <div class="nav-container">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
     <main>
-        <section id="filter">
-            <label for="price-filter">Max Price:</label>
-            <select id="price-filter">
-                <!-- Options will be populated dynamically -->
-            </select>
-        </section>
-        <section id="places-list">
-            <!-- List of places will be populated dynamically -->
-        </section>
+        <h1>Places to Stay</h1>
+        
+        <div class="places-container">
+            <div class="place-card">
+                <img src="place1.jpg" alt="Cozy Downtown Apartment">
+                <h3>Cozy Downtown Apartment</h3>
+                <p>Perfect for business travelers and city explorers</p>
+                <div class="place-price">$85/night</div>
+                <a href="place.html?id=1" class="details-button">View Details</a>
+            </div>
+
+            <div class="place-card">
+                <img src="place2.jpg" alt="Modern Studio">
+                <h3>Modern Studio with City View</h3>
+                <p>Stylish studio apartment with amazing views</p>
+                <div class="place-price">$120/night</div>
+                <a href="place.html?id=2" class="details-button">View Details</a>
+            </div>
+
+            <div class="place-card">
+                <img src="place3.jpg" alt="Luxury Villa">
+                <h3>Luxury Villa with Pool</h3>
+                <p>Spacious villa perfect for families and groups</p>
+                <div class="place-price">$250/night</div>
+                <a href="place.html?id=3" class="details-button">View Details</a>
+            </div>
+
+            <div class="place-card">
+                <img src="place4.jpg" alt="Beach House">
+                <h3>Beachfront House</h3>
+                <p>Wake up to ocean views every morning</p>
+                <div class="place-price">$180/night</div>
+                <a href="place.html?id=4" class="details-button">View Details</a>
+            </div>
+
+            <div class="place-card">
+                <img src="place5.jpg" alt="Mountain Cabin">
+                <h3>Mountain Cabin Retreat</h3>
+                <p>Escape to nature in this cozy mountain cabin</p>
+                <div class="place-price">$95/night</div>
+                <a href="place.html?id=5" class="details-button">View Details</a>
+            </div>
+
+            <div class="place-card">
+                <img src="place6.jpg" alt="Urban Loft">
+                <h3>Urban Loft Space</h3>
+                <p>Industrial style loft in trendy neighborhood</p>
+                <div class="place-price">$140/night</div>
+                <a href="place.html?id=6" class="details-button">View Details</a>
+            </div>
+        </div>
     </main>
-    <script src="scripts.js"></script>
+
+    <footer>
+        <p>&copy; 2025 HBnB. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>

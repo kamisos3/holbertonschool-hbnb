@@ -1,29 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Place Details</title>
+    <title>HBnB - Place Details</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="icon.png" type="image/png">
 </head>
 <body>
+    <header>
+        <div class="header-container">
+            <img src="logo.png" alt="HBnB Logo" class="logo">
+            <a href="login.html" class="login-button">Login</a>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
     <main>
-        <section id="place-details">
-            <!-- Place details will be populated dynamically -->
-        </section>
-        <section id="reviews">
-            <!-- Reviews will be populated dynamically -->
-        </section>
-        <section id="add-review">
-            <h2>Add a Review</h2>
-            <form id="review-form">
-                <label for="review-text">Review:</label>
-                <textarea id="review-text" name="review-text" required></textarea>
+        <div class="place-details">
+            <div class="place-info">
+                <h2>Cozy Downtown Apartment</h2>
+                <img src="place1.jpg" alt="Cozy Downtown Apartment">
                 
-                <button type="submit">Submit</button>
-            </form>
+                <div class="place-meta">
+                    <div>
+                        <strong>Host:</strong> John Smith
+                    </div>
+                    <div class="place-price">
+                        <strong>Price:</strong> $85/night
+                    </div>
+                    <div>
+                        <strong>Location:</strong> Downtown, City Center
+                    </div>
+                    <div>
+                        <strong>Max Guests:</strong> 4
+                    </div>
+                </div>
+                
+                <div class="description">
+                    <h3>Description</h3>
+                    <p>Welcome to our cozy apartment located in the heart of downtown! This beautifully furnished space offers modern amenities and easy access to restaurants, shops, and public transportation. Perfect for business travelers, couples, or small families looking to explore the city.</p>
+                </div>
+                
+                <div class="amenities">
+                    <h3>Amenities</h3>
+                    <ul>
+                        <li>WiFi</li>
+                        <li>Kitchen</li>
+                        <li>Air Conditioning</li>
+                        <li>Heating</li>
+                        <li>TV</li>
+                        <li>Washer</li>
+                        <li>Parking</li>
+                        <li>Pet Friendly</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <section id="reviews">
+            <h2>Reviews</h2>
+            
+            <div class="review-card">
+                <div class="review-header">
+                    <span class="review-user">Alice Johnson</span>
+                    <span class="review-rating">★★★★★ 5/5</span>
+                </div>
+                <p class="review-comment">Amazing place! Very clean and exactly as described. The location is perfect for exploring downtown. John was a great host and very responsive. Highly recommend!</p>
+            </div>
+            
+            <div class="review-card">
+                <div class="review-header">
+                    <span class="review-user">Michael Brown</span>
+                    <span class="review-rating">★★★★☆ 4/5</span>
+                </div>
+                <p class="review-comment">Great apartment with all the amenities you need. The wifi was fast and the kitchen was well-equipped. Only minor issue was some street noise at night, but overall a wonderful stay.</p>
+            </div>
+            
+            <div class="review-card">
+                <div class="review-header">
+                    <span class="review-user">Sarah Davis</span>
+                    <span class="review-rating">★★★★★ 5/5</span>
+                </div>
+                <p class="review-comment">Perfect location and beautiful apartment! Everything was spotless and the host provided excellent recommendations for local restaurants. Will definitely stay here again!</p>
+            </div>
+            
+            <div class="text-center mt-2">
+                <a href="add_review.html" class="details-button">Add Review</a>
+            </div>
         </section>
     </main>
-    <script src="scripts.js"></script>
+
+    <footer>
+        <p>&copy; 2025 HBnB. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>

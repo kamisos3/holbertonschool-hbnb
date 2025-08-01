@@ -94,6 +94,8 @@ async function fetchPlaces(token) {
     }
 }
 
+
+
 function displayPlaces(places) {
     const placesList = document.getElementById('places-list');
     placesList.innerHTML = '';
@@ -170,7 +172,6 @@ function initializeLoginPage() {
 function initializePlaceDetailsPage() {
     console.log('Initializing place details page...');
     
-    // Test network connectivity first
     testAPIConnectivity();
     
     const urlParams = new URLSearchParams(window.location.search);

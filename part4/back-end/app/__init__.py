@@ -2,6 +2,7 @@ from flask import Flask, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from config import DevelopmentConfig
 from app.extensions import bcrypt, jwt
+from flask_cors import CORS
 
 db = SQLAlchemy()
 
@@ -14,6 +15,7 @@ def create_app(config_class="config.DevelopmentConfig"):
 
     from app.api.v1 import api_v1
 
+    CORS(app, resources={r"/api/*": {"origins": "http://localhost:8000"}})
 
     bcrypt.init_app(app)
     jwt.init_app(app)

@@ -31,6 +31,21 @@ header {
     padding: 0 20px;
 }
 
+.header nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: auto;
+    padding: 0;
+}
+
+.header nav a {
+    display: inline-block; 
+    margin: 0 1rem;
+    padding: 0;
+}
+
 /* Logo class - required */
 .logo {
     height: 50px;
@@ -47,10 +62,40 @@ header {
     border: none;
     cursor: pointer;
     transition: background-color 0.3s;
+    display: block;
+    visibility: visible;
+    opacity: 1;
 }
 
 .login-button:hover {
     background-color: #89aeb7;
+}
+
+/* Hide login buttons when user is authenticated */
+.login-button.hidden {
+    display: none;
+}
+
+/* User info styling */
+.user-info {
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logout-button {
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.logout-button:hover {
+    background-color: #ff5252;
 }
 
 /* Navigation bar - must include relevant links */
@@ -139,7 +184,7 @@ h1 {
 
 .place-price {
     font-size: 1rem;
-    font-weight: regular;
+    font-weight: bold;
     margin-bottom: 1rem;
 }
 
@@ -217,6 +262,24 @@ h1 {
     border-radius: 5px;
     border: 1px solid #e9ecef;
     padding: .5rem;
+}
+
+.location-box {
+    background-color: #e8f5e8 !important;
+    border: 1px solid #c3e6c3 !important;
+}
+
+.location-box strong {
+    color: #2d5a2d;
+}
+
+.location-box span {
+    font-family: monospace;
+    background-color: #fff;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    margin-left: 8px;
 }
 
 .place-price {

@@ -26,56 +26,16 @@
 
     <main>
         <h1>Places to Stay</h1>
-        
-        <div class="places-container">
-            <div class="place-card">
-                <img src="place1.jpg" alt="Cozy Downtown Apartment">
-                <h3>Cozy Downtown Apartment</h3>
-                <p>Perfect for business travelers and city explorers</p>
-                <div class="place-price">$85/night</div>
-                <a href="place.html?id=1" class="details-button">View Details</a>
-            </div>
-
-            <div class="place-card">
-                <img src="place2.jpg" alt="Modern Studio">
-                <h3>Modern Studio with City View</h3>
-                <p>Stylish studio apartment with amazing views</p>
-                <div class="place-price">$120/night</div>
-                <a href="place.html?id=2" class="details-button">View Details</a>
-            </div>
-
-            <div class="place-card">
-                <img src="place3.jpg" alt="Luxury Villa">
-                <h3>Luxury Villa with Pool</h3>
-                <p>Spacious villa perfect for families and groups</p>
-                <div class="place-price">$250/night</div>
-                <a href="place.html?id=3" class="details-button">View Details</a>
-            </div>
-
-            <div class="place-card">
-                <img src="place4.jpg" alt="Beach House">
-                <h3>Beachfront House</h3>
-                <p>Wake up to ocean views every morning</p>
-                <div class="place-price">$180/night</div>
-                <a href="place.html?id=4" class="details-button">View Details</a>
-            </div>
-
-            <div class="place-card">
-                <img src="place5.jpg" alt="Mountain Cabin">
-                <h3>Mountain Cabin Retreat</h3>
-                <p>Escape to nature in this cozy mountain cabin</p>
-                <div class="place-price">$95/night</div>
-                <a href="place.html?id=5" class="details-button">View Details</a>
-            </div>
-
-            <div class="place-card">
-                <img src="place6.jpg" alt="Urban Loft">
-                <h3>Urban Loft Space</h3>
-                <p>Industrial style loft in trendy neighborhood</p>
-                <div class="place-price">$140/night</div>
-                <a href="place.html?id=6" class="details-button">View Details</a>
-            </div>
+        <div style="margin-bottom: 1.5rem;">
+            <label for="price-filter"><strong>Filter by price:</strong></label>
+            <select id="price-filter">
+                <option value="80">Up to $80</option>
+                <option value="150">Up to $150</option>
+                <option value="300">Up to $300</option>
+                <option value="all" selected>All</option>
+            </select>
         </div>
+        <div id="places-list" class="places-container"></div>
     </main>
 
     <footer>

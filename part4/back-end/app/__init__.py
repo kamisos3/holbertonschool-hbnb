@@ -15,7 +15,7 @@ def create_app(config_class="config.DevelopmentConfig"):
 
     from app.api.v1 import api_v1
 
-    CORS(app, resources={r"/api/*": {"origins": "http://localhost:8000"}})
+    CORS(app)
 
     bcrypt.init_app(app)
     jwt.init_app(app)

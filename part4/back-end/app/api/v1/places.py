@@ -57,8 +57,13 @@ class PlaceList(Resource):
 
     @ns.response(200, 'List of places retrieved successfully')
     def get(self):
-        places = facade.get_all_places()
-        return [place.to_dict() for place in places], 200
+        try:
+            places = facade.get_all_places()
+            print("DEBUG: Retrieved places:", places)
+            return [place.to_dict() for place in places], 200
+        except Exception as e:
+            print("ERROR in PlaceList.get:", str(e))
+            return {'error': 'Could not retrieve places', 'details': str(e)}, 500
 
     @jwt_required()
     @ns.response(403, 'Unauthorized action')

@@ -425,20 +425,23 @@ function loadPlaceDetails(placeId) {
         })
         .then(place => {
             console.log('Place data loaded:', place);
-            
             document.getElementById('place-title').textContent = place.title || 'Unknown Title';
-            document.getElementById('host-name').textContent = (place.owner?.first_name || 'John') + ' ' + (place.owner?.last_name || 'Smith');
-            document.getElementById('place-price').textContent = `$${place.price || 'N/A'}/night`;
-            document.getElementById('location-text').textContent = `Lat: ${place.latitude || 'N/A'}, Lng: ${place.longitude || 'N/A'}`;
-            document.getElementById('max-guests').textContent = place.max_guests || '4'; // Use API data or default
+            let hostName = 'Unknown';
+            if (place.owner && (place.owner.first_name || place.owner.last_name)) {
+                hostName = `${place.owner.first_name || ''} ${place.owner.last_name || ''}`.trim();
+            }
+            document.getElementById('host-name').textContent = hostName || 'Unknown';
+            document.getElementById('place-price').textContent = (place.price !== undefined && place.price !== null) ? `$${place.price}/night` : 'N/A';
+            let locationText = 'N/A';
+            if (place.latitude && place.longitude) {
+                locationText = `Lat: ${place.latitude}, Lng: ${place.longitude}`;
+            }
+            document.getElementById('location-text').textContent = locationText;
+            document.getElementById('max-guests').textContent = place.max_guests || 'N/A';
             document.getElementById('place-description').textContent = place.description || 'No description available';
-            
             const imageElement = document.getElementById('place-image');
-            console.log('Mapping image for place details:', place.title); // Debug log
-            
             if (place.title) {
                 const titleLower = place.title.toLowerCase();
-                
                 if (titleLower.includes('cozy downtown') || titleLower.includes('downtown')) {
                     imageElement.src = 'place1.jpg';
                     imageElement.style.display = 'block';
@@ -463,16 +466,13 @@ function loadPlaceDetails(placeId) {
             } else {
                 imageElement.style.display = 'none';
             }
-            console.log('Selected image for details:', imageElement.src);
-            imageElement.alt = place.title;
-            
+            imageElement.alt = place.title || 'Place image';
             loadPlaceReviews(placeId);
         })
         .catch(error => {
             console.error('Detailed error loading place details:', error);
             console.error('Error message:', error.message);
             console.error('Place ID that failed:', placeId);
-            
             document.getElementById('place-title').textContent = `Error loading place (ID: ${placeId})`;
             document.getElementById('host-name').textContent = 'API Error';
             document.getElementById('place-price').textContent = 'Check console for details';

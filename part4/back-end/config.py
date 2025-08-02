@@ -9,9 +9,10 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///development.db' # URI, Uniform Source Identifier for SQLite database
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(os.path.dirname(os.path.abspath(__file__)), 'instance', 'development.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     ENV = 'development'
+
 
 config = {
     'development': DevelopmentConfig,

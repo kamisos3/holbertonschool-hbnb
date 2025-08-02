@@ -4,6 +4,7 @@ app = create_app()
 
 with app.app_context():
     from app import db
+    from app.models import User, Place, Review, Amenity
     db.create_all()
     print("Database tables created successfully!")
 

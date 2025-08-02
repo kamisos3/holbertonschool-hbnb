@@ -31,6 +31,9 @@ function initializePage() {
     }
 }
 
+function initializeRegisterPage() {
+    console.log('Initializing registration page...');
+}
 
 function initializeHomePage() {
     console.log('Initializing homepage...');
@@ -82,6 +85,10 @@ function getCookie(name) {
 }
 
 async function fetchPlaces(token) {
+    console.log('Fetching places from API...');
+    console.log('Backend URL:', 'http://localhost:5000/api/v1/places/');
+    console.log('Current page URL:', window.location.href); 
+
     try {
         const response = await fetch('http://localhost:5000/api/v1/places/');
         if (!response.ok) throw new Error('Failed to fetch places');
@@ -90,7 +97,16 @@ async function fetchPlaces(token) {
         displayPlaces(places);
     } catch (err) {
         console.error('Error fetching places:', err);
-        displayPlaces([]);
+
+        const placesList = document.getElementById('places-list');
+        if (placesList) {
+            placesList.innerHTML = `
+                <div style="text-align: center; margin-top: 20px;">
+                    <h3>Unable to load places</h3>
+                    <p>Error: ${err.message}</p>
+                </div>
+            `;
+        }
     }
 }
 
@@ -103,14 +119,14 @@ function displayPlaces(places) {
         placesList.innerHTML = '<p>No places found.</p>';
         return;
     }
-    places.forEach(place => {
+    places.forEach((place, index) => {  
         const card = document.createElement('div');
         card.className = 'place-card';
         
 
         let imageSrc = '';
-        console.log('Mapping image for place:', place.title);
-        
+        console.log(`Card for place: ${index + 1}: ${place.title}`);
+
         const titleLower = place.title.toLowerCase();
         
         if (titleLower.includes('cozy downtown') || titleLower.includes('downtown')) {
@@ -126,9 +142,9 @@ function displayPlaces(places) {
         } else if (titleLower.includes('urban loft') || titleLower.includes('loft') || titleLower.includes('urban')) {
             imageSrc = 'place6.jpg';
         }
-        
-        console.log('Selected image:', imageSrc);
-        
+
+        console.log(`Selected image "${place.title}": ${imageSrc}`);
+
         const imageHtml = imageSrc ? `<img src="${imageSrc}" alt="${place.title}">` : '';
         
         card.innerHTML = `
@@ -139,6 +155,7 @@ function displayPlaces(places) {
             <a href="place.html?id=${place.id}" class="details-button">View Details</a>
         `;
         placesList.appendChild(card);
+        console.log(`Card added for place: ${place.title}`);
     });
 }
 
@@ -195,13 +212,13 @@ function testAPIConnectivity() {
         console.log('API connectivity test - Status:', response.status);
         console.log('API connectivity test - OK:', response.ok);
         if (response.ok) {
-            console.log('✅ API is reachable');
+            console.log('APIis reachable');
         } else {
-            console.log('❌ API returned error status');
+            console.log('API returned error status');
         }
     })
     .catch(error => {
-        console.log('❌ API connectivity test failed:', error);
+        console.log('API connectivity test failed:', error);
         console.log('This usually means:');
         console.log('1. Backend server is not running on port 5000');
         console.log('2. CORS is not properly configured');

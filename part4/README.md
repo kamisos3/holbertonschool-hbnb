@@ -56,8 +56,6 @@ Set up the Python virtual environment and install dependencies:
 
 ```bash
 cd front-end
-python3 -m venv ../hbnb_env
-source ../hbnb_env/bin/activate
 pip install -r requirements.txt
 ```
 

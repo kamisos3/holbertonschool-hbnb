@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     console.log('HBnB application loaded successfully');
     
@@ -159,6 +158,7 @@ function displayPlaces(places) {
     });
 }
 
+
 function setupPriceFilter() {
     const filter = document.getElementById('price-filter');
     if (!filter) return;
@@ -227,12 +227,7 @@ function testAPIConnectivity() {
 }
 
 function initializeAddReviewPage() {
-    console.log('Initializing add review page...');
-    const token = getCookie('token');
-    if (!token) {
-        window.location.href = 'index.html';
-        return;
-    }
+    const token = checkAuthentication();
     const placeId = getPlaceIdFromURL();
     const reviewForm = document.getElementById('review-form');
     if (reviewForm) {
@@ -241,18 +236,24 @@ function initializeAddReviewPage() {
             const formData = new FormData(reviewForm);
             const reviewText = formData.get('review');
             const rating = formData.get('rating');
+            let reviewer = formData.get('reviewer');
             if (!reviewText || !rating) {
                 alert('Please provide both a rating and review text');
                 return;
             }
             try {
-                const response = await fetch(`http://localhost:5000/api/v1/places/${placeId}/reviews`, {
+                const response = await fetch(`http://localhost:8000/api/v1/places/${placeId}/reviews`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify({ review: reviewText, rating: parseInt(rating, 10) })
+                    body: JSON.stringify({
+                        reviewer: reviewer,
+                        rating: rating,
+                        text: reviewText
+                    })
                 });
                 if (response.ok) {
                     alert('Review submitted successfully!');
@@ -270,7 +271,9 @@ function initializeAddReviewPage() {
             }
         });
     }
-    setupRatingInteraction();
+    if (typeof setupRatingInteraction === 'function') {
+        setupRatingInteraction();
+    }
 }
 
 function checkAddReviewAuthentication() {

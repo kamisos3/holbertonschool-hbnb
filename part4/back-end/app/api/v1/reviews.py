@@ -1,8 +1,10 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 
 ns = Namespace('Review', description='Review related operations')
+reviews_bp = Blueprint('reviews', __name__)
 
 review_model = ns.model('Review', {
     'text': fields.String(required=True, description='Text of the review'),
@@ -96,7 +98,8 @@ class ReviewResource(Resource):
         facade.delete_review(review_id)
         return {}, 204
 
-@ns.route('/places/<place_id>/reviews')
+
+@ns.route('/places/<string:place_id>/reviews')
 class PlaceReviews(Resource):
     @ns.response(200, 'Success')
     @ns.response(404, 'Place not found')
@@ -106,3 +109,56 @@ class PlaceReviews(Resource):
             return {"error": "Place not found"}, 404
         reviews = facade.get_reviews_by_place(place_id)
         return [vars(r) for r in reviews], 200
+
+    @jwt_required()
+    @ns.expect(review_model)
+    @ns.response(201, 'Review created')
+    @ns.response(400, 'Invalid input')
+    def post(self, place_id):
+        current_user = get_jwt_identity()
+        data = ns.payload
+        data['user_id']  = current_user
+        data['place_id'] = place_id
+
+        place = facade.get_place(place_id)
+        if not place:
+            return {"error": "Place not found"}, 404
+        if place.owner.id == current_user:
+            return {"error": "You cannot review your own place"}, 400
+        if facade.get_user_review_for_place(current_user, place_id):
+            return {"error": "You have already reviewed this place"}, 400
+
+        try:
+            review = facade.create_review(data)
+            return review.to_dict(), 201
+        except ValueError as e:
+            return {"error": str(e)}, 400
+
+@ns.route('/places/<place_id>/reviews')
+class PlaceReviewCreate(Resource):
+    @jwt_required()
+    @ns.expect(review_model)
+    @ns.response(201, 'Review created')
+    @ns.response(400, 'Invalid input')
+    def post(self, place_id):
+        current_user = get_jwt_identity()
+        data = ns.payload
+        data['user_id'] = current_user
+        data['place_id'] = place_id
+
+        place = facade.get_place(place_id)
+        if not place:
+            return {"error": "Place not found"}, 404
+
+        if place.owner.id == current_user:
+            return {"error": "You cannot review your own place"}, 400
+
+        existing = facade.get_user_review_for_place(current_user, place_id)
+        if existing:
+            return {"error": "You have already reviewed this place"}, 400
+
+        try:
+            review = facade.create_review(data)
+            return review.to_dict(), 201
+        except ValueError as e:
+            return {"error": str(e)}, 400

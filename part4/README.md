@@ -48,7 +48,7 @@ HBnB is a web application that allows users to browser, search, and review place
 Clone this repository in your terminal:
 
 ```bash
-git clone 
+git clone https://github.com/kamisos3/holbertonschool-hbnb/tree/main
 cd holbertonschool-hbnb/part4
 ```
 
